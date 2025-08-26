@@ -1,4 +1,4 @@
-# FitTracAI-Microservice
+# FitnessAI-Microservice
 **Under development currently**
 
 ## Details:
