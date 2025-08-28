@@ -8,7 +8,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
-    private UserRepository repository;
+    private final UserRepository repository;
+    public UserService(UserRepository repository) {
+        this.repository = repository;
+    }
 
     public UserResponse register(RegisterRequest request) {
          if(repository.existsByEmail(request.getEmail())){
@@ -33,6 +36,24 @@ public class UserService {
        userResponse.setUpdatedAt(savedUser.getUpdatedAt());
 
        return userResponse;
+
+    }
+
+    public UserResponse getUserProfile(String userID) {
+        User user = repository.findById(userID)
+                .orElseThrow(()->new RuntimeException("user not found"));
+
+        UserResponse userResponse = new UserResponse();
+        userResponse.setId(user.getId());
+        userResponse.setEmail(user.getEmail());
+        userResponse.setFirstName(user.getFirstName());
+        userResponse.setLastName(user.getLastName());
+        userResponse.setPassword(user.getPassword());
+        userResponse.setCreatedAt(user.getCreatedAt());
+        userResponse.setUpdatedAt(user.getUpdatedAt());
+
+        return userResponse;
+
 
     }
 }
