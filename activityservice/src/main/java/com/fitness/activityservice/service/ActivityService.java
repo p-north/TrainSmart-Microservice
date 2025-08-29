@@ -7,6 +7,9 @@ import com.fitness.activityservice.model.Activity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class ActivityService {
@@ -43,4 +46,16 @@ public class ActivityService {
 
     }
 
+//    interacts with database, providing list of activities for that user
+    public List<ActivityResponse> getUserActivities(String userID) {
+        List<Activity> activites = activityRepository.findByUserID(userID);
+
+        return activites.stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+
+
+
+
+    }
 }
