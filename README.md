@@ -15,7 +15,7 @@ Eureka Server (Spring Cloud Netflix) Spring Cloud Gateway
 <br/>
 Keycloak (OAuth 2.0)
 <br/>
-RabbiMQ (Spring AMQP)
+RabbitMQ (Spring AMQP)
 <br/>
 MySQL
 <br/>
