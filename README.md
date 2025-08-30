@@ -2,7 +2,7 @@
 **Under development currently**
 
 ## Details:
--Fitness app built on a microservices architecture
+-Fitness app built on a microservices architecture (3 services)
 <br/>
 -Fully integrated with AI (Gemini API)
 
