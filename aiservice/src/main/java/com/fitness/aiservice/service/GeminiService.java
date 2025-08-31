@@ -1,41 +1,36 @@
 package com.fitness.aiservice.service;
 
+import com.google.genai.Client;
+import com.google.genai.types.GenerateContentResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.Map;
 
+@Slf4j
 @Service
+
 public class GeminiService {
-    private final WebClient webClient;
 
-    @Value("${gemini.api.url}")
-    private String geminiURL;
-    @Value("${gemini.api.url}")
-    private String geminiKEY
+    @Value("${gemini.api.key}")
+    private String geminiKEY;
+    private final Client client;
 
-    public GeminiService(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.build();
+    public GeminiService(@Value("${gemini.api.key}") String geminiKEY) {
+        this.client = Client.builder().apiKey(geminiKEY).build();
     }
 
-    public String getAnswer(String question){
-        Map<String, Object> requestBody = Map.of(
-                "contents", new Object[]{
-                        Map.of("parts", new Object[]{
-                                Map.of("text", question)
-                        })
-                }
-        );
 
-        //Call the API and return the response
-        return webClient.post()
-                .uri(geminiURL + geminiKEY)
-                .header("Content-Type", "application/json")
-                .bodyValue(requestBody)
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
+    public String getAnswer(String question){
+        GenerateContentResponse response = client.models.generateContent(
+                "gemini-2.5-flash",
+                question,
+                null
+        );
+        return response.text();
+
 
     }
 
