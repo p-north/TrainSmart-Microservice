@@ -7,12 +7,18 @@ import com.google.api.client.json.Json;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class ActivityAIService {
     private final GeminiService geminiService;
+    private final WebClient.Builder builder;
 
 
     public String generateRecommendation(Activity activity) {
@@ -32,25 +38,44 @@ public class ActivityAIService {
                     .replaceAll("```", "")
                     .trim();
 
-            JsonNode rootNode = mapper.readTree(cleaned);
+            log.info("PARSED Response: {}", cleaned);
+            JsonNode analysisJson = mapper.readTree(cleaned);
+            JsonNode analysisNode = analysisJson.path("analysis");
+            StringBuilder fullAnalysis= new StringBuilder();
+            addAnalysisSection(fullAnalysis, analysisNode, "overall", "Overall:");
+            addAnalysisSection(fullAnalysis, analysisNode, "pace", "Pace:");
+            addAnalysisSection(fullAnalysis, analysisNode, "heartRate", "HeartRate:");
+            addAnalysisSection(fullAnalysis, analysisNode, "caloriesBurned", "Calories:");
 
-//            JsonNode textNode = rootNode.path("candidates")
-//                    .get(0)
-//                    .path("content")
-//                    .path("parts")
-//                    .get(0)
-//                    .path("text");
+            List<String> improvements = extractImprovements(analysisJson.path("improvements"));
 
-//            String jsonContent = textNode.asText()
-//                    .replaceAll("```json", "")
-//                    .replaceAll("```", "")
-//                    .trim();
-            log.info("PARSED Response: {}", aiResponse);
+
+
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+    }
+
+    private List<String> extractImprovements(JsonNode improvementsNode) {
+        List<String> improvements = new ArrayList<>();
+        if(improvementsNode.isArray()){
+            improvementsNode.forEach(improvement ->{
+                String area = improvement.path("area").asText();
+                String detail = improvement.path("recommendation").asText();
+                improvements.add(String.format("%s: %s", area, detail));
+            });
+        }
+        return improvements.isEmpty() ? Collections.singletonList("No specific improvements provided") : improvements;
+    }
+
+    private void addAnalysisSection(StringBuilder fullAnalysis, JsonNode analysisNode, String key, String prefix) {
+        if (!analysisNode.path(key).isMissingNode()) {
+            fullAnalysis.append(prefix)
+                    .append(analysisNode.path(key).asText())
+                    .append("\n\n");
+        }
     }
 
 
