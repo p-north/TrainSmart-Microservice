@@ -5,7 +5,6 @@ import com.fitness.userservice.dto.RegisterRequest;
 import com.fitness.userservice.dto.UserResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +27,7 @@ public class UserController {
 
     @GetMapping("/{userID}/validate")
     public ResponseEntity<Boolean> validateUser(@PathVariable String userID){
-        return ResponseEntity.ok(userService.existByUserID(userID));
+        return ResponseEntity.ok(userService.existsByKeyCloakID(userID));
     }
 
 
