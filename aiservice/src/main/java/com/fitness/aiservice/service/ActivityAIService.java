@@ -41,8 +41,6 @@ public class ActivityAIService {
                     .replaceAll("```json", "")
                     .replaceAll("```", "")
                     .trim();
-
-            log.info("PARSED Response: {}", cleaned);
             JsonNode analysisJson = mapper.readTree(cleaned);
             JsonNode analysisNode = analysisJson.path("analysis");
             StringBuilder fullAnalysis= new StringBuilder();
