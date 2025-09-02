@@ -1,4 +1,4 @@
-# FitnessAI-Microservice 🏋️‍♂️🤖
+# TrainSmart-Microservice 🏋️‍♂️🤖
 > **Under Development**
 
 A fitness application backend built on a **microservices architecture**, fully integrated with **AI (Google Gemini API)** to deliver intelligent, personalized workout and health recommendations.
