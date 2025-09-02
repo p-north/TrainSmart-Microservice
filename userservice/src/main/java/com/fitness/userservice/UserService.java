@@ -20,7 +20,7 @@ public class UserService {
              User existingUser = repository.findByEmail((request.getEmail()));
              UserResponse userResponse = new UserResponse();
              userResponse.setId(existingUser.getId());
-             userResponse.setKeycloakID(existingUser.getKeycloakID());
+             userResponse.setKeyCloakID(existingUser.getKeyCloakID());
              userResponse.setEmail(existingUser.getEmail());
              userResponse.setFirstName(existingUser.getFirstName());
              userResponse.setLastName(existingUser.getLastName());
@@ -35,13 +35,14 @@ public class UserService {
         User user = new User();
         user.setEmail(request.getEmail());
         user.setPassword(request.getPassword());
+        user.setKeyCloakID(request.getKeyCloakID());
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
 
        User savedUser = repository.save(user);
        UserResponse userResponse = new UserResponse();
        userResponse.setId(savedUser.getId());
-       savedUser.setKeycloakID(userResponse.getKeycloakID());
+       userResponse.setKeyCloakID(savedUser.getKeyCloakID());
        userResponse.setEmail(savedUser.getEmail());
        userResponse.setFirstName(savedUser.getFirstName());
        userResponse.setLastName(savedUser.getLastName());
@@ -70,11 +71,6 @@ public class UserService {
 
 
     }
-
-//    public Boolean existByUserID(String userID) {
-//        return repository.existsByKeyCloakID(userID);
-//    }
-
 
     public Boolean existsByKeyCloakID(String userID) {
         return  repository.existsByKeyCloakID(userID);

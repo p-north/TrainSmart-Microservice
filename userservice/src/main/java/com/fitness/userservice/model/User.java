@@ -19,7 +19,7 @@ public class User {
     @Column(unique = true, nullable = false)
     private String email;
 
-    private String keycloakID;
+    private String keyCloakID;
 
     @Column(nullable = false)
     private String password;
